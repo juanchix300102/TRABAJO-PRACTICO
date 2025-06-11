@@ -1,9 +1,9 @@
 # TRABAJO-PRACTICO
-trabajo practico N1 
-fecha 11/06/2025
-integrantes:
-andres juan 
-angel palmieri
-franco la regina 
-fernando marelli
-tiziana ochoa 
+Trabajo practico N1 
+Fecha 11/06/2025
+Integrantes:
+Andres Juan 
+Angel Palmieri
+Franco La Regina 
+Fernando Marelli
+Tiziana Ochoa 
