@@ -6,4 +6,3 @@ andres juan
 angel palmieri
 franco la regina 
 fernando marelli
-tiziana ochoa 
