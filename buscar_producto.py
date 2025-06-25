@@ -1,51 +1,38 @@
-import sqlite3
+# Lista de productos simulando una base de datos
+productos = [
+    {"id": 1, "nombre": "Heladera", "marca": "Samsung", "precio": 250000},
+    {"id": 2, "nombre": "Lavarropas", "marca": "LG", "precio": 200000},
+    {"id": 3, "nombre": "Microondas", "marca": "Philips", "precio": 85000},
+    {"id": 4, "nombre": "Aire Acondicionado", "marca": "Whirlpool", "precio": 300000},
+    {"id": 5, "nombre": "Televisor", "marca": "Sony", "precio": 270000},
+]
 
-# Conectar o crear la base de datos
-conn = sqlite3.connect("tienda_electrodomesticos.db")
-cursor = conn.cursor()
+# Función para buscar productos por nombre o marca
+def buscar_producto(busqueda):
+    encontrados = []
+    for producto in productos:
+        if (busqueda.lower() in producto["nombre"].lower()) or (busqueda.lower() in producto["marca"].lower()):
+            encontrados.append(producto)
+    return encontrados
 
-# Crear la tabla de productos si no existe
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS productos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
-    categoria TEXT,
-    precio REAL
-)
-''')
+# Menú de búsqueda
+def menu_busqueda():
+    while True:
+        print("\n🔎 Buscar productos en la tienda de electrodomésticos")
+        termino = input("Ingrese el nombre o marca del producto a buscar (o escriba 'salir' para terminar): ")
 
-# Insertar productos de ejemplo (solo si la tabla está vacía)
-cursor.execute("SELECT COUNT(*) FROM productos")
-if cursor.fetchone()[0] == 0:
-    productos = [
-        ("Heladera Samsung", "Refrigeración", 250000),
-        ("Lavarropas LG", "Lavado", 180000),
-        ("Microondas BGH", "Cocina", 75000),
-        ("Aire acondicionado Philco", "Climatización", 300000),
-        ("Televisor Samsung 55''", "TV", 450000)
-    ]
-    cursor.executemany("INSERT INTO productos (nombre, categoria, precio) VALUES (?, ?, ?)", productos)
-    conn.commit()
+        if termino.lower() == "salir":
+            print("👋 Gracias por usar la tienda. ¡Hasta luego!")
+            break
 
-# Función para buscar productos por nombre o categoría
-def buscar_productos(termino_busqueda):
-    cursor.execute("SELECT * FROM productos WHERE nombre LIKE ? OR categoria LIKE ?", 
-                   (f"%{termino_busqueda}%", f"%{termino_busqueda}%"))
-    resultados = cursor.fetchall()
-    if resultados:
-        print("Resultados encontrados:")
-        for producto in resultados:
-            print(f"ID: {producto[0]}, Nombre: {producto[1]}, Categoría: {producto[2]}, Precio: ${producto[3]:,.2f}")
-    else:
-        print("No se encontraron productos con ese término.")
+        resultados = buscar_producto(termino)
 
-# Interfaz simple
-while True:
-    print("\n--- BUSCADOR DE PRODUCTOS ---")
-    busqueda = input("Ingrese nombre o categoría del producto (o 'salir' para terminar): ")
-    if busqueda.lower() == "salir":
-        break
-    buscar_productos(busqueda)
+        if resultados:
+            print("\n✅ Productos encontrados:")
+            for p in resultados:
+                print(f"ID: {p['id']} | Nombre: {p['nombre']} | Marca: {p['marca']} | Precio: ${p['precio']}")
+        else:
+            print("❌ No se encontraron productos con ese nombre o marca.")
 
-# Cerrar conexión al final
-conn.close()
+# Ejecutar el menú
+menu_busqueda()
